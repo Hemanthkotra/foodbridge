@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}FoodBridge{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#f0fdf4', 100:'#dcfce7', 400:'#4ade80', 500:'#22c55e', 600:'#16a34a', 700:'#15803d', 900:'#14532d' },
+            warm:  { 50:'#fff7ed', 400:'#fb923c', 500:'#f97316', 600:'#ea580c' }
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
+    .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+    .btn-primary { background: linear-gradient(135deg, #16a34a, #15803d); transition: all 0.2s ease; }
+    .btn-primary:hover { background: linear-gradient(135deg, #15803d, #14532d); transform: translateY(-1px); }
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold text-gray-900">Food<span class="text-brand-600">Bridge</span></span>
+      </a>
+      <div class="flex items-center gap-4">
+        {% if session.get('user_id') %}
+          <span class="text-sm text-gray-500">{{ session.get('name') }}</span>
+          <form action="/logout" method="POST" class="inline">
+            <button class="text-sm font-medium text-gray-600 hover:text-red-500 transition-colors">Log out</button>
+          </form>
+        {% else %}
+          <a href="/login-page" class="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors">Log in</a>
+          <a href="/register-page" class="btn-primary text-white text-sm font-medium px-4 py-2 rounded-lg">Get started</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page content -->
+  <main>{% block content %}{% endblock %}</main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-100 mt-20 py-8 text-center text-sm text-gray-400">
+    FoodBridge — turning surplus into sustenance.
+  </footer>
+
+</body>
+</html>

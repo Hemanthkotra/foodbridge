@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}FoodBridge — End Food Waste{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<section class="relative bg-gradient-to-br from-brand-900 via-brand-700 to-green-500 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <svg width="100%" height="100%"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid)"/></svg>
+  </div>
+  <div class="relative max-w-6xl mx-auto px-6 py-28 text-center fade-in">
+    <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-sm font-medium mb-6">
+      <span class="w-2 h-2 bg-brand-400 rounded-full animate-pulse"></span>
+      Making every meal count
+    </div>
+    <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+      Connecting Surplus Food<br/>
+      <span class="text-brand-400">with Those Who Need It</span>
+    </h1>
+    <p class="text-lg md:text-xl text-green-100 max-w-2xl mx-auto mb-10 leading-relaxed">
+      FoodBridge links restaurants with surplus food directly to nearby orphanages — reducing waste, ending hunger, one meal at a time.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/register-page" class="btn-primary px-8 py-4 rounded-xl text-white font-semibold text-lg shadow-lg">
+        Join as Restaurant
+      </a>
+      <a href="/register-page" class="glass px-8 py-4 rounded-xl text-white font-semibold text-lg hover:bg-white/20 transition-all">
+        Join as Orphanage
+      </a>
+    </div>
+  </div>
+
+  <!-- Wave -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 80L1440 80L1440 20C1200 80 960 0 720 40C480 80 240 0 0 40L0 80Z" fill="#f9fafb"/>
+    </svg>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="max-w-6xl mx-auto px-6 -mt-4 mb-16">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 card-hover">
+      <div class="text-4xl font-extrabold text-brand-600 mb-2">1/3</div>
+      <div class="text-gray-600 font-medium">of all food produced globally is wasted</div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 card-hover">
+      <div class="text-4xl font-extrabold text-warm-500 mb-2">690M</div>
+      <div class="text-gray-600 font-medium">people go to bed hungry every night</div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 text-center shadow-sm border border-gray-100 card-hover">
+      <div class="text-4xl font-extrabold text-brand-600 mb-2">0 km</div>
+      <div class="text-gray-600 font-medium">food needs to travel when connected locally</div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="max-w-6xl mx-auto px-6 py-10 mb-10">
+  <div class="text-center mb-14">
+    <h2 class="text-3xl font-bold text-gray-900 mb-3">How FoodBridge works</h2>
+    <p class="text-gray-500 max-w-xl mx-auto">Three simple steps from surplus food to a warm meal.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {% for step in [
+      ('01', 'Restaurant registers', 'Sign up and add your restaurant details. Takes less than 2 minutes.', 'brand'),
+      ('02', 'Post surplus food',    'After service, list any leftover food with quantity and pickup time.',  'warm'),
+      ('03', 'Orphanage claims it',  'Nearby orphanages see the listing and claim it with one click.',       'brand')
+    ] %}
+    <div class="relative bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-hover">
+      <div class="w-12 h-12 {% if loop.index == 2 %}bg-warm-50 text-warm-600{% else %}bg-brand-50 text-brand-700{% endif %} rounded-xl flex items-center justify-center font-extrabold text-lg mb-5">
+        {{ step[0] }}
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ step[1] }}</h3>
+      <p class="text-gray-500 leading-relaxed text-sm">{{ step[2] }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="max-w-6xl mx-auto px-6 mb-10">
+  <div class="bg-gradient-to-r from-brand-700 to-green-500 rounded-3xl p-12 text-center text-white">
+    <h2 class="text-3xl font-bold mb-4">Ready to make a difference?</h2>
+    <p class="text-green-100 mb-8 max-w-md mx-auto">Join restaurants and orphanages already using FoodBridge in your city.</p>
+    <a href="/register-page" class="bg-white text-brand-700 font-semibold px-8 py-4 rounded-xl hover:bg-brand-50 transition-colors inline-block">
+      Create a free account
+    </a>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Available Food — FoodBridge{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-10">
+
+  <!-- Header -->
+  <div class="mb-10 flex items-start justify-between flex-wrap gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Hello, {{ name }} 👋</h1>
+      <p class="text-gray-500 mt-1">Browse available food listings from restaurants near you.</p>
+    </div>
+    <div class="bg-brand-50 border border-brand-100 rounded-xl px-5 py-3 text-center">
+      <div class="text-2xl font-bold text-brand-700">{{ listings|length }}</div>
+      <div class="text-xs text-brand-600 font-medium">listings available</div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="hidden fixed top-6 right-6 z-50 bg-gray-900 text-white px-5 py-3 rounded-xl text-sm font-medium shadow-xl transition-all">
+  </div>
+
+  <!-- Listings grid -->
+  {% if listings %}
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    {% for item in listings %}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden card-hover fade-in" id="card-{{ item.id }}">
+
+      <!-- Card color bar -->
+      <div class="h-2 bg-gradient-to-r from-brand-500 to-green-400"></div>
+
+      <div class="p-6">
+        <!-- Food name + quantity badge -->
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 leading-tight">{{ item.item_name }}</h3>
+          <span class="bg-brand-50 text-brand-700 text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap border border-brand-100">
+            {{ item.quantity }}
+          </span>
+        </div>
+
+        <!-- Restaurant info -->
+        <div class="space-y-2 mb-5">
+          <div class="flex items-center gap-2 text-sm text-gray-600">
+            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 8v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            <span class="font-medium text-gray-800">{{ item.restaurant_name }}</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            {{ item.restaurant_address or 'Address not provided' }}
+          </div>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+            </svg>
+            {{ item.restaurant_phone or 'Phone not provided' }}
+          </div>
+        </div>
+
+        <!-- Expiry -->
+        <div class="flex items-center gap-2 bg-warm-50 rounded-xl px-3 py-2 mb-5 border border-orange-100">
+          <svg class="w-4 h-4 text-warm-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span class="text-xs font-medium text-warm-600">Available until {{ item.expiry_time }}</span>
+        </div>
+
+        <!-- Notes -->
+        {% if item.notes %}
+        <p class="text-xs text-gray-400 mb-5 italic">{{ item.notes }}</p>
+        {% endif %}
+
+        <!-- Claim button -->
+        <button onclick="claimFood({{ item.id }})"
+          id="btn-{{ item.id }}"
+          class="btn-primary w-full py-3 rounded-xl text-white font-semibold text-sm">
+          Claim this food
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <!-- Empty state -->
+  <div class="text-center py-24">
+    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-5">
+      <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+    </div>
+    <h3 class="text-xl font-semibold text-gray-700 mb-2">No food available right now</h3>
+    <p class="text-gray-400 text-sm max-w-sm mx-auto">Check back soon — restaurants post listings throughout the day.</p>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+async function claimFood(foodId) {
+  const btn = document.getElementById('btn-' + foodId);
+  btn.disabled = true;
+  btn.textContent = 'Claiming…';
+
+  const res = await fetch('/food/claim/' + foodId, { method: 'POST' });
+  const data = await res.json();
+
+  const toast = document.getElementById('toast');
+  if (res.ok) {
+    toast.textContent = '✓ Claimed! Contact the restaurant to arrange pickup.';
+    toast.className = toast.className.replace('bg-gray-900', 'bg-brand-700');
+    const card = document.getElementById('card-' + foodId);
+    card.style.opacity = '0.4';
+    card.style.pointerEvents = 'none';
+    btn.textContent = 'Claimed ✓';
+    btn.className = btn.className.replace('btn-primary', 'bg-gray-200 text-gray-500 cursor-not-allowed');
+  } else {
+    toast.textContent = '✗ ' + data.error;
+    btn.disabled = false;
+    btn.textContent = 'Claim this food';
+  }
+  toast.classList.remove('hidden');
+  setTimeout(() => toast.classList.add('hidden'), 4000);
+}
+</script>
+{% endblock %}
